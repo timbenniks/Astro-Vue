@@ -1,0 +1,74 @@
+---
+import * as prismic from "@prismicio/client";
+import PrismicDOM from 'prismic-dom';
+
+export async function createCollection() {
+  const endpoint = prismic.getEndpoint("timbenniks");
+  const client = prismic.createClient(endpoint);
+  const videosData = await client.getAllByType("video");
+
+  const videos = videosData.map((video) => {
+    return {
+      uid: video.uid,
+      title: PrismicDOM.RichText.asText(video.data.title),
+      content: PrismicDOM.RichText.asText(video.data.content),
+      video_embed: video.data.video_embed,
+      image: video.data.image.url,
+      tags: video.tags,
+      date: new Date(video.data.publication_date).toDateString()
+    }
+  })
+
+  return {
+    route: '/videos/:uid',
+    
+    paths() {
+      return videos.map((video, i) => ({params: {uid: video.uid}}));
+    },
+
+    async props({ params }) {
+      return {item: videos.find((video) => video.uid === params.uid)};
+    },
+  }
+}
+
+const { item } = Astro.props;
+
+---
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<title>{item.title}</title>
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+	<link rel="stylesheet" href="/global.css">
+
+  <style global>
+    article p {
+      margin: 0 0 1rem 0;
+    }
+
+    .video_wrapper {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9, for an aspect ratio of 1:1 change to this value to 100% */ 
+    }
+    
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <main class="max-w-5xl mx-auto mt-12">
+    <p class="mb-12 underline"><a href="/">&lt; Back to videos</a></p>
+    <h1 class="font-bold text-4xl mb-8">{item.title}</h1>
+    <div class="video_wrapper">
+      {item.video_embed.html}
+    </div>
+  </main>
+</body>
+</html>
