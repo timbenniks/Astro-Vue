@@ -5,5 +5,5 @@ export default {
   devOptions: {
     tailwindConfig: "./tailwind.config.js",
   },
-  renderers: ["@astrojs/renderer-vue"],
+  renderers: ["@astrojs/renderer-vue", "@astrojs/renderer-react"],
 };
