@@ -1,5 +1,7 @@
 <template>
   <li class="video-item" :id="video.uid">
+    <p>VUE</p>
+
     <a :href="`/videos/${video.uid}`">
       <img
         :alt="video.title"

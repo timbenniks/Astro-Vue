@@ -2,10 +2,7 @@
 import * as prismic from "@prismicio/client";
 import PrismicDOM from 'prismic-dom';
 
-//VUE
-import VideoItem from '../components/VideoItem.vue';
-//React
-import VidItem from '../components/VidItem.jsx';
+import VideoItemVue from '../components/VideoItemVue.vue';
 
 const endpoint = prismic.getEndpoint("timbenniks");
 const client = prismic.createClient(endpoint);
@@ -32,19 +29,12 @@ let title = "Tim's Videos"
 	<link rel="stylesheet" href="/global.css">
 </head>
 <body>
-
   <main class="max-w-5xl mx-auto mt-12">
 		<ul class="grid grid-cols-2 sm:grid-cols-3 gap-8">
-		
-  		{videos.map((video) => (
-				<>
-				<VideoItem client:visible video={video} />
-				<VidItem client:visible video={video}/>
-				</>
+			{videos.map((video) => (
+				<VideoItemVue video={video} />
 			))}
-			
 		</ul>
 	</main>
-	
 </body>
 </html>
